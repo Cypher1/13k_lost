@@ -45,7 +45,7 @@ function Game(user1, user2) {
 Game.prototype.start = function () {
   this.user1.start(this, this.user2);
   this.user2.start(this, this.user1);
-}
+};
 
 /**
  * Is game ended
@@ -53,7 +53,7 @@ Game.prototype.start = function () {
  */
 Game.prototype.ended = function () {
   return this.user1.guess !== GUESS_NO && this.user2.guess !== GUESS_NO;
-}
+};
 
 /**
  * Final score
@@ -77,7 +77,7 @@ Game.prototype.score = function () {
     this.user1.draw();
     this.user2.draw();
   }
-}
+};
 
 /**
  * User session class

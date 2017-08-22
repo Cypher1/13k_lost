@@ -5,7 +5,8 @@
   "license": "MIT",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "lint": "eslint ./public --fix"
   },
   "keywords": [
     "js13kgames",
@@ -13,6 +14,14 @@
   ],
   "engines": {
     "node": "8.*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cypher1/13k_lost.git"
+  },
+  "homepage": "https://github.com/voronianski-on-games/js13kGames-boilerplate#readme",
+  "devDependencies": {
+    "eslint": "^3.3.0"
   },
   "dependencies": {
     "express": "4.15.*",
