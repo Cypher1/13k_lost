@@ -5,11 +5,11 @@ Game server for the [js13kGames Competition](http://js13kgames.com/).
 ## Install
 
 [Download](https://github.com/js13kgames/js13kserver/archive/master.zip) the skeleton.
-Extract the files and install the third party libraries with `npm`. 
+Extract the files and install the third party libraries with `npm`.
 
     npm install
 
-## Runinng
+## Running
 
 You can run the server locally with the following command:
 
@@ -19,7 +19,7 @@ You can reach the test server at [http://localhost:3000](http://localhost:3000)
 
 ## Code structure
 
-All your code must be in the `public` folder. Put your server side code into 
+All your code must be in the `public` folder. Put your server side code into
 the `server.js` file. The `shared.js` file is loaded at the begining of the
 `server.js` file. You can also use this code on the client side.
 
@@ -28,7 +28,7 @@ the `server.js` file. The `shared.js` file is loaded at the begining of the
 1. Push your files to your GitHub repository
 2. Create new WebApp on heroku
 3. Connect your WebApp with the GitHub repository
-4. Deploy your code 
+4. Deploy your code
 
 ## Submit your entry
 
@@ -48,7 +48,7 @@ the `server.js` file. The `shared.js` file is loaded at the begining of the
   - Your game will run in a node.js based sandbox environment. That means you will not really use node. You cannot require modules and your own modules shipped by your 13k pack.
 
 * Do not leak the sandbox
-  - This is not a hacking competition. This is a way to help the competition admins, the site persistence, and you. Do not touch the `procfile` and the `index.js` file. 
+  - This is not a hacking competition. This is a way to help the competition admins, the site persistence, and you. Do not touch the `procfile` and the `index.js` file.
 
 * Socket.io client lib
   - You can use it. Simply add `<script src="/socket.io/socket.io.js"></script>` to your HTML and that will be loaded. No server configuration will be needed. The sandbox already did it.
@@ -60,7 +60,7 @@ the `server.js` file. The `shared.js` file is loaded at the begining of the
   - There's a simple "Rock, Paper, Scissors" example in the public folder.
 
 * I have more questions!
-  - Feel free to send them to [server@js13kgames.com](mailto:server@js13kgames.com). 
+  - Feel free to send them to [server@js13kgames.com](mailto:server@js13kgames.com).
 
 ## FAQ
 
@@ -69,7 +69,7 @@ the `server.js` file. The `shared.js` file is loaded at the begining of the
 
 * Can I add more npm packages?
   - Yes, but you cannot use them in your game code.
- 
+
 * What files count in the 13kb limit?
   - All files in the `public` folder.
 

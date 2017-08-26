@@ -21,7 +21,8 @@
   },
   "homepage": "https://github.com/voronianski-on-games/js13kGames-boilerplate#readme",
   "devDependencies": {
-    "eslint": "^3.3.0"
+    "eslint": "^3.3.0",
+    "uglify-js": "^3.0.28"
   },
   "dependencies": {
     "express": "4.15.*",
