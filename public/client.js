@@ -1,6 +1,56 @@
 "use strict";
 
-(function () {
+(function() {
+  class Sprite {
+    constructor(context, width, height, image) {
+      let img = new Image();
+      img.src = "img/" + image;
+      img.onload = () => {
+        this.render();
+      }
+      context.imageSmoothingEnabled = false;
+
+      Object.assign(this, {
+        context,
+        width,
+        height,
+        image: img,
+        currentFrame: 0,
+        countUp: true
+      });
+    }
+
+    update() {
+      if (this.countUp) {
+         ++this.currentFrame;
+         if (this.currentFrame === 2) {
+            this.countUp = false;
+         }
+      } else {
+         --this.currentFrame; // TODO: not hardcode width of this to 3?
+         if (this.currentFrame === 0) {
+            this.countUp = true;
+         }
+      }
+
+    }
+
+    render() {
+      this.context.clearRect(x, 0, this.width*2, this.height*2);
+      x += SQUARE_PIXEL_SIZE / 2
+      this.context.drawImage(
+         this.image,
+         this.currentFrame * this.width,
+         SQUARE_PIXEL_SIZE*2,  // we can change this by a multiple of 16 to change direction of avatar
+         this.width,
+         this.height,
+         x,
+         0,
+         this.width * 2,
+         this.height * 2
+      );
+    }
+  }
 
   var socket, //Socket.IO client
     buttons, //Button elements
@@ -10,7 +60,10 @@
       draw: 0,
       win: 0,
       lose: 0
-    };
+    },
+    canvas,
+    player,
+    x = 0;
 
   /**
    * Disable all button
@@ -56,49 +109,49 @@
    */
   function bind() {
 
-    socket.on("start", function () {
+    socket.on("start", function() {
       enableButtons();
       setMessage("Round " + (points.win + points.lose + points.draw + 1));
     });
 
-    socket.on("win", function () {
+    socket.on("win", function() {
       points.win++;
       displayScore("You win!");
     });
 
-    socket.on("lose", function () {
+    socket.on("lose", function() {
       points.lose++;
       displayScore("You lose!");
     });
 
-    socket.on("draw", function () {
+    socket.on("draw", function() {
       points.draw++;
       displayScore("Draw!");
     });
 
-    socket.on("end", function () {
+    socket.on("end", function() {
       disableButtons();
       setMessage("Waiting for opponent...");
     });
 
-    socket.on("connect", function () {
+    socket.on("connect", function() {
       disableButtons();
       setMessage("Waiting for opponent...");
     });
 
-    socket.on("disconnect", function () {
+    socket.on("disconnect", function() {
       disableButtons();
       setMessage("Connection lost!");
     });
 
-    socket.on("error", function () {
+    socket.on("error", function() {
       disableButtons();
       setMessage("Connection error!");
     });
 
     for (var i = 0; i < buttons.length; i++) {
-      (function (button, guess) {
-        button.addEventListener("click", function (e) {
+      (function(button, guess) {
+        button.addEventListener("click", function(e) {
           disableButtons();
           socket.emit("guess", guess);
         }, false);
@@ -106,14 +159,28 @@
     }
   }
 
+  function gameLoop() {
+    setTimeout(function() {
+      player.update();
+      player.render();
+      window.requestAnimationFrame(gameLoop);
+   }, 200); // controlling the game speed / FPS
+
+  }
+
   /**
    * Client module init
    */
   function init() {
-    socket = io({ upgrade: false, transports: ["websocket"] });
+    socket = io({upgrade: false, transports: ["websocket"]});
     buttons = document.getElementsByTagName("button");
     message = document.getElementById("message");
     score = document.getElementById("score");
+    canvas = document.getElementById("cvs");
+    canvas.width = 500;
+    canvas.height = 500;
+    player = new Sprite(canvas.getContext("2d"), SQUARE_PIXEL_SIZE, SQUARE_PIXEL_SIZE, "player.png");
+    gameLoop();
     disableButtons();
     bind();
   }
