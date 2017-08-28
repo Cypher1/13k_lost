@@ -4,7 +4,7 @@
  * User sessions
  * @param {array} users
  */
-var users = [];
+let users = [];
 
 /**
  * Find opponent for a user
@@ -27,16 +27,6 @@ function findOpponent(user) {
  */
 function removeUser(user) {
   users.splice(users.indexOf(user), 1);
-}
-
-/**
- * Game class
- * @param {User} user1
- * @param {User} user2
- */
-function Game(user1, user2) {
-  this.user1 = user1;
-  this.user2 = user2;
 }
 
 class Game {
