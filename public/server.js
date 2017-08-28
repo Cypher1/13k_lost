@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 /**
  * User sessions
@@ -13,7 +13,7 @@ let users = [];
 function findOpponent(user) {
   for (let i = 0; i < users.length; i++) {
     if (
-      user !== users[i] && 
+      user !== users[i] &&
       users[i].opponent === null
     ) {
       new Game(user, users[i]).start();
@@ -48,7 +48,7 @@ class Game {
   ended() {
     return this.user1.guess !== GUESS_NO && this.user2.guess !== GUESS_NO;
   }
-  
+
   /**
    * Final score
    */
@@ -85,7 +85,7 @@ class User {
     this.opponent = null;
     this.guess = GUESS_NO;
   }
-  
+
   /**
    * Set guess value
    * @param {number} guess
@@ -101,7 +101,7 @@ class User {
     this.guess = guess;
     return true;
   }
-  
+
   /**
    * Start new game
    * @param {Game} game
@@ -111,7 +111,7 @@ class User {
     this.game = game;
     this.opponent = opponent;
     this.guess = GUESS_NO;
-    this.socket.emit("start");		
+    this.socket.emit('start');
   }
 
   /**
@@ -121,19 +121,19 @@ class User {
     this.game = null;
     this.opponent = null;
     this.guess = GUESS_NO;
-    this.socket.emit("end");
+    this.socket.emit('end');
   }
 
   win() {
-    this.socket.emit("win", this.opponent.guess);
+    this.socket.emit('win', this.opponent.guess);
   }
 
   lose() {
-    this.socket.emit("lose", this.opponent.guess);
+    this.socket.emit('lose', this.opponent.guess);
   }
 
   draw() {
-    this.socket.emit("draw", this.opponent.guess);
+    this.socket.emit('draw', this.opponent.guess);
   }
 }
 
@@ -148,8 +148,8 @@ module.exports = function (socket) {
   users.push(user);
   findOpponent(user);
 
-  socket.on("disconnect", function () {
-    console.log("Disconnected: " + socket.id);
+  socket.on('disconnect', function () {
+    console.log('Disconnected: ' + socket.id);
     removeUser(user);
     if (user.opponent) {
       user.opponent.end();
@@ -157,13 +157,13 @@ module.exports = function (socket) {
     }
   });
 
-  socket.on("guess", function (guess) {
-    console.log("Guess: " + socket.id);
+  socket.on('guess', function (guess) {
+    console.log('Guess: ' + socket.id);
     if (user.setGuess(guess) && user.game.ended()) {
       user.game.score();
       user.game.start();
     }
   });
 
-  console.log("Connected: " + socket.id);
+  console.log('Connected: ' + socket.id);
 };
