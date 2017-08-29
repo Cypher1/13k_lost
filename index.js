@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 const createSandbox = () => {
   const sandbox = {
@@ -25,7 +25,7 @@ const createSandbox = () => {
 
 const exposeRemoteServices = (sandbox) => {
   if (process.env.GLITCHD_TOKEN === undefined) {
-    return
+    return;
   }
 
   const services = require('glitchd-client-node');
@@ -39,25 +39,23 @@ const exposeRemoteServices = (sandbox) => {
   });
 };
 
-require('fs').readFile('./public/shared.js', 'utf8', (err, shared) => {
-  require('fs').readFile('./public/server.js', 'utf8', (err, code) => {
-    if (err) {
-      throw err
-    }
+require('fs').readFile('./dist/server-min.js', 'utf8', (err, code) => {
+  if (err) {
+    throw err
+  }
 
-    const
-      express = require('express'),
-      app     = express(),
-      server  = require('http').Server(app),
-      io      = require('socket.io')(server),
-      sandbox = createSandbox();
+  const
+    express = require('express'),
+    app     = express(),
+    server  = require('http').Server(app),
+    io      = require('socket.io')(server),
+    sandbox = createSandbox();
 
-    require('vm').runInNewContext(shared + '\n' + code, sandbox);
-    io.on('connection', sandbox.module.exports);
-    app.set('port', (process.env.PORT || 3000));
-    app.use(express.static('public'));
-    server.listen(app.get('port'), () => {
-      console.log('Server started at port: ' + app.get('port'));
-    });
+  require('vm').runInNewContext(code, sandbox);
+  io.on('connection', sandbox.module.exports);
+  app.set('port', (process.env.PORT || 3000));
+  app.use(express.static('dist'));
+  server.listen(app.get('port'), () => {
+    console.log('Server started at port: ' + app.get('port'));
   });
 });

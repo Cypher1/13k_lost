@@ -6,6 +6,10 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
+    "clean": "rm -rf dist",
+    "build_client": "mergejs -c client_files.txt dist/client.js",
+    "build_server": "mergejs -c server_files.txt dist/server.js",
+    "build": "npm run clean && mkdir dist && npm run build_server && npm run build_client && cp public/index.html dist/index.html",
     "lint": "eslint ./public --fix"
   },
   "keywords": [
