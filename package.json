@@ -5,6 +5,7 @@
   "license": "MIT",
   "main": "index.js",
   "scripts": {
+    "dev": "node index-dev.js",
     "start": "node index.js",
     "clean": "rm -rf dist",
     "build_client": "mergejs -c client_files.txt dist/client.js",
