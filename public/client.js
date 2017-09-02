@@ -1,10 +1,5 @@
 'use strict';
 
-// let img = new Image();
-// img.src = 'img/' + image;
-// img.onload = () => {
-//   this.render();
-// }
 (function() {
   let socket, //Socket.IO client
     canvas = document.getElementById('cvs'),
