@@ -1,2 +1,6 @@
 public/shared.js
-public/client.js
+public/client/globals.js
+public/client/Sprite.js
+public/client/Player.js
+public/client/client.js
+public/client/keyboardEvents.js
