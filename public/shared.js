@@ -1,6 +1,9 @@
-"use strict";
+'use strict';
+/**
+ * Shared code between the client and server
+ */
 
-var GUESS_NO = 0;
-var GUESS_ROCK = 1;
-var GUESS_PAPER = 2;
-var GUESS_SCISSORS = 3;
+const GUESS_NO = 0,
+  GUESS_ROCK = 1,
+  GUESS_PAPER = 2,
+  GUESS_SCISSORS = 3;

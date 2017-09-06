@@ -8,9 +8,10 @@
     "dev": "node index-dev.js",
     "start": "node index.js",
     "clean": "rm -rf dist",
-    "build_client": "mergejs -c client_files.txt dist/client.js",
+    "build_client:html":"html-minifier --collapse-whitespace public/index.html | sed 's/<!-- DEV START -->.*<!-- DEV END -->/<script src=\"\\/client.js\"><\\/script>/' > dist/index.html",
+    "build_client": "mergejs -c client_files.txt dist/client.js && npm run build_client:html && cp -R public/img dist/",
     "build_server": "mergejs -c server_files.txt dist/server.js",
-    "build": "npm run clean && mkdir dist && npm run build_server && npm run build_client && cp public/index.html dist/index.html",
+    "build": "npm run clean && mkdir dist && npm run build_server && npm run build_client",
     "lint": "eslint ./public --fix"
   },
   "keywords": [
@@ -27,7 +28,7 @@
   "homepage": "https://github.com/voronianski-on-games/js13kGames-boilerplate#readme",
   "devDependencies": {
     "eslint": "^3.3.0",
-    "uglify-js": "^3.0.28"
+    "html-minifier": "^3.5.3"
   },
   "dependencies": {
     "express": "4.15.*",

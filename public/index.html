@@ -1,24 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<title>Rock, Paper, Scissors</title>
-<meta charset="UTF-8">
+  <title>Lost</title>
+  <meta charset="UTF-8">
+  <style>
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0px;
+      overflow: hidden;
+    }
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    canvas {
+  image-rendering: optimizeSpeed;             /* Older versions of FF          */
+  image-rendering: -moz-crisp-edges;          /* FF 6.0+                       */
+  image-rendering: -webkit-optimize-contrast; /* Safari                        */
+  image-rendering: -o-crisp-edges;            /* OS X & Windows Opera (12.02+) */
+  image-rendering: pixelated;                 /* Awesome future-browsers       */
+  -ms-interpolation-mode: nearest-neighbor;   /* IE                            */
+}
+  </style>
 </head>
+
 <body>
+  <canvas id="cvs"></canvas>
 
-<div style="text-align:center">
-    <h1 id="message"></h1>
-    <div>
-        <button>Rock</button>
-        <button>Paper</button>
-        <button>Scissors</button>
-    </div>
-    <div id="score"></div>
-</div>
-
-<script src="/socket.io/socket.io.js"></script>
-<script src="/client-min.js"></script>
-<script src="/client.js"></script>
-
+  <script src="/socket.io/socket.io.js"></script>
+  <!-- DEV START -->
+  <script src="/shared.js"></script>
+  <script src="/client/globals.js"></script>
+  <script src="/client/Sprite.js"></script>
+  <script src="/client/Player.js"></script>
+  <script src="/client/client.js"></script>
+  <script src="/client/keyboardEvents.js"></script>
+  <!-- DEV END -->
 </body>
+
 </html>
