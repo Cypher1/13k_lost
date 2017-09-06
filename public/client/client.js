@@ -6,7 +6,7 @@
     IMAGES = ['player.png'];
 
   $context = canvas.getContext('2d');
-  $context.imageSmoothingEnabled = false;
+  windowResize();
 
   /**
    * Load all the required images / sprites
@@ -24,12 +24,20 @@
     }
   }
 
+  function windowResize() {
+    let size = NUM_SQUARES * Math.floor(Math.min(window.innerWidth, window.innerHeight) / NUM_SQUARES);
+    $context.canvas.width = size;
+    $context.canvas.height = size;
+    $context.imageSmoothingEnabled = false;
+    SQUARE_PIXEL_SIZE = size / NUM_SQUARES
+  }
+
   var now,
     last = Date.now();
 
   function frame() {
     now = Date.now();
-    if (now - last >= 50) {
+    if (now - last >= 70) {
       update();
       last = now;
     }
@@ -38,7 +46,11 @@
   }
 
   function update() {
-    $context.clearRect(0, 0, canvas.width, canvas.height);
+    let { width, height } = $context.canvas;
+
+    $context.clearRect(0, 0, width, height);
+    $context.fillStyle = '#E7F5FE';
+    $context.fillRect(0,0, width, height)
     $player.update();
   }
 
@@ -50,9 +62,10 @@
     $images = result;
     // socket = io({upgrade: false, transports: ['websocket']});
 
-    $player = new Player(0, SQUARE_PIXEL_SIZE, SQUARE_PIXEL_SIZE, $images['player.png'], 0, 0);
+    $player = new Player(0, SPRITE_PIXEL_SIZE, SPRITE_PIXEL_SIZE, $images['player.png'], 0, 0);
     requestAnimationFrame(frame);
   }
 
+  window.addEventListener('resize', windowResize);
   loadImages(init);
 })();

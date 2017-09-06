@@ -16,30 +16,62 @@ class Player extends Sprite {
     this.id = id;
     this.sx = 0;
     this.sy = 0;
+    this.isWalking = false;
+    this.walkAnimation = [1,2,1,0];
+    this._stepSize = 1 / (this.walkAnimation.length)
+  }
+
+  moveDirection(direction) {
+    if (this.sy === direction) {
+      this.isWalking = true;
+    } else {
+      this.sy = direction;
+    }
   }
 
   update() {
-    ++this.sx;
+    if (!this.isWalking) {
 
-    if ($keys[KEY_CODES.LEFT]) {
-      --this.x;
-      this.sy = 1;
-    } else if ($keys[KEY_CODES.UP]) {
-      --this.y;
-      this.sy = 3;
-    } else if ($keys[KEY_CODES.RIGHT]) {
-      ++this.x;
-      this.sy = 2;
-    } else if ($keys[KEY_CODES.DOWN]) {
-      ++this.y;
-      this.sy = 0;
-    } else {
-      --this.sx;
+      if ($keys[KEY_CODES.LEFT]) {
+        this.moveDirection(1);
+      } else if ($keys[KEY_CODES.UP]) {
+        this.moveDirection(3);
+      } else if ($keys[KEY_CODES.RIGHT]) {
+        this.moveDirection(2);
+      } else if ($keys[KEY_CODES.DOWN]) {
+        this.moveDirection(0);
+      } else {
+        this.isWalking = false;
+      }
     }
-    this.sx = this.sx % 3;
-  }
-  render() {
-    super.render(this.sx * SQUARE_PIXEL_SIZE, this.sy * SQUARE_PIXEL_SIZE);
+
+    if (this.isWalking) {
+      switch (this.sy) {
+        case 0:
+          this.y += this._stepSize;
+          break;
+        case 1:
+          this.x -= this._stepSize;
+          break;
+        case 2:
+          this.x += this._stepSize;
+          break;
+        case 3:
+          this.y -= this._stepSize;
+      }
+      if (++this.sx === this.walkAnimation.length) {
+        this.isWalking = false;
+        this.sx = 0;
+
+      }
+    } else {
+      this.isWalking = false;
+    }
+    this.x = this.x.clamp(0, NUM_SQUARES-1);
+    this.y = this.y.clamp(0, NUM_SQUARES-1);
   }
 
+  render() {
+    super.render(this.walkAnimation[this.sx] * SPRITE_PIXEL_SIZE, this.sy * SPRITE_PIXEL_SIZE);
+  }
 }

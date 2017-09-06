@@ -19,8 +19,6 @@ class Sprite {
     });
   }
 
-
-
   /**
    * Draw the sprite on the main canvas
    * @param {Integer} [sx] - source x coordinate of the sprite segment to draw
@@ -33,10 +31,10 @@ class Sprite {
       sy,
       this.width,
       this.height,
-      this.x * SQUARE_PIXEL_SIZE / 2,
-      this.y * SQUARE_PIXEL_SIZE / 2,
-      this.width * SCALE,
-      this.height * SCALE
+      this.x * SQUARE_PIXEL_SIZE,
+      this.y * SQUARE_PIXEL_SIZE,
+      SQUARE_PIXEL_SIZE,
+      SQUARE_PIXEL_SIZE
     );
   }
 }
