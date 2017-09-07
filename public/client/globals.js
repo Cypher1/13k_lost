@@ -31,11 +31,12 @@ var $context,
   $player,
   $world,
   $keys = {},
-  FRAME_TIME = 70,
+  FRAME_TIME = 55,
   SPRITE_PIXEL_SIZE = 16,
   SQUARE_PIXEL_SIZE = 16,
   NUM_SQUARES = 12,
   SCALE = 2,
+  WORLD_SIZE = 100
   KEY_CODES = {
     LEFT: 37,
     UP: 38,
