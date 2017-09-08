@@ -69,6 +69,19 @@ const World = (function() {
       }
       return cellmap;
     }
+    
+    render() {
+      for (let x = 0; x < WORLD_SIZE; ++x) {
+        for (let y = 0; y < WORLD_SIZE; ++y) {
+          if (this.grid[x][y]) {
+            $context.fillStyle = '#3355AA';
+          } else {
+            $context.fillStyle='#443333';
+          }
+          $context.fillRect(x * SQUARE_PIXEL_SIZE, y * SQUARE_PIXEL_SIZE, SQUARE_PIXEL_SIZE, SQUARE_PIXEL_SIZE);
+        }
+      }
+    }
   }
   return World;
 })();
