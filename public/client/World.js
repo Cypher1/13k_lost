@@ -1,18 +1,24 @@
-'use strict';
+
+/*
+* The grid is represented by a 2D array of integers.
+* 0 - The tile is empty
+* 1 - The tile is a wall
+* 2 - The tile is treasure?
+*/
 
 const World = (function() {
   const BIRTH_LIMIT = 4,
     DEATH_LIMIT = 3,
-    NUM_SIMULATION_STEPS = 3;
+    NUM_SIMULATION_STEPS = 2;
 
-  // Generate random map of size [N, N] filled with Booleans
+  // Generate random map of size [N, N] filled with Integers
   const repeat = (fn, n) => Array(n).fill().map(fn);
-  const randBool = () => Math.random() < .5;
-  const randomMap = n => repeat(() => repeat(randBool, n), n);
+  const randInteger = () => int(Math.random() < .4);
+  const randomMap = n => repeat(() => repeat(randInteger, n), n);
 
   /**
   * Count the number of "alive" neighbour cells.
-  * @param {Array<Array<Boolean>>} [map] Map containing cells.
+  * @param {Array<Array<Integer>>} [map] Map containing cells.
   * @param {Integer} [x] x co-ordinate of the cell to check the neighbours of.
   * @param {Integer} [y] y co-ordinate of the cell to check the neighbours of.
   * @returns {Integer} Number of cells alive in the ring around the cell (x,y)
@@ -36,21 +42,23 @@ const World = (function() {
       }
     }
     return count;
-  }
+  };
 
   /**
   * Performs a single step of the Cellular Automata rules
-  * @param {Array<Array<Boolean>>} [oldMap] The initial map to perform the iteration on.
-  * @returns {Array<Array<Boolean>>} The map after a single simulation step
+  * @param {Array<Array<Integer>>} [oldMap] The initial map to perform the iteration on.
+  * @returns {Array<Array<Integer>>} The map after a single simulation step
   */
   const doSimulationStep = oldMap =>
     oldMap.map((row, x) =>
       row.map((elem, y) => {
         const numAliveNeighbours = countAliveNeighbours(oldMap, x, y);
 
-        return elem
-          ? numAliveNeighbours >= DEATH_LIMIT
-          : numAliveNeighbours > BIRTH_LIMIT;
+        return int(
+          elem
+            ? numAliveNeighbours >= DEATH_LIMIT
+            : numAliveNeighbours > BIRTH_LIMIT
+        );
       })
     );
 
@@ -62,26 +70,33 @@ const World = (function() {
       this.grid = this.generateMap();
     }
 
+    /**
+    * Generates a cave tunnel system using the Cellular Automata ruleset.
+    * The map generated is GRID_SIZE width and height.
+    * @returns {Array<Array<Integer>>}
+    */
     generateMap() {
-      let cellmap = randomMap(WORLD_SIZE);
+      let cellmap = randomMap(GRID_SIZE);
       for (let i = 0; i < NUM_SIMULATION_STEPS; ++i) {
         cellmap = doSimulationStep(cellmap);
       }
       return cellmap;
     }
-    
+
     render() {
-      for (let x = 0; x < WORLD_SIZE; ++x) {
-        for (let y = 0; y < WORLD_SIZE; ++y) {
+      for (let x = 0; x < GRID_SIZE; ++x) {
+        for (let y = 0; y < GRID_SIZE; ++y) {
           if (this.grid[x][y]) {
-            $context.fillStyle = '#3355AA';
+            $context.fillStyle = '#443333';
           } else {
-            $context.fillStyle='#443333';
+            $context.fillStyle = '#3355AA';
           }
           $context.fillRect(x * SQUARE_PIXEL_SIZE, y * SQUARE_PIXEL_SIZE, SQUARE_PIXEL_SIZE, SQUARE_PIXEL_SIZE);
         }
       }
     }
   }
+
+  // let the World be globally accessible
   return World;
 })();

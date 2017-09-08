@@ -26,6 +26,10 @@ function GET_DIRECTION() {
   }
 }
 
+function int(boolVal) {
+  return boolVal ? 1 : 0;
+}
+
 var $context,
   $images,
   $player,
@@ -34,9 +38,10 @@ var $context,
   FRAME_TIME = 55,
   SPRITE_PIXEL_SIZE = 16,
   SQUARE_PIXEL_SIZE = 16,
-  NUM_SQUARES = 12,
   SCALE = 2,
   WORLD_SIZE = 100,
+  SCALE = 2,
+  GRID_SIZE = 50,
   KEY_CODES = {
     LEFT: 37,
     UP: 38,

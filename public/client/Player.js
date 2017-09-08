@@ -22,11 +22,11 @@ class Player extends AnimatedSprite {
     this.animate(this.walkAnimation, this.direction);
   }
 
-  update() {
+update() {
     this.state();
 
-    this.x = this.x.clamp(0, NUM_SQUARES-1);
-    this.y = this.y.clamp(0, NUM_SQUARES-1);
+    this.x = this.x.clamp(0, GRID_SIZE-1);
+    this.y = this.y.clamp(0, GRID_SIZE-1);
   }
 
   moveDirection(direction) {
@@ -49,19 +49,69 @@ class Player extends AnimatedSprite {
     }
   }
 
+  updateOLD() {
+    this.walking();
+      if (this.isWalking) {
+      console.log(this.x, this.y);
+      switch (this.sy) {
+        case 0:
+        case 1:
+          this.x -= this._stepSize;
+          if ($world.grid[Math.floor(this.x).clamp(0, GRID_SIZE-1)][this.y] === 1) {
+            this.x += this._stepSize;
+          }
+          break;
+        case 2:
+          this.x += this._stepSize;
+          if ($world.grid[Math.ceil(this.x).clamp(0, GRID_SIZE-1)][this.y] === 1) {
+            this.x -= this._stepSize;
+          }
+          break;
+        case 3:
+          this.y -= this._stepSize;
+          if ($world.grid[this.x][Math.floor(this.y).clamp(0, GRID_SIZE-1)] === 1) {
+            this.y += this._stepSize;
+          }
+          break;
+      }
+      if (++this.sx === this.walkAnimation.length) {
+        this.isWalking = false;
+        this.sx = 0;
+
+      }
+    } else {
+      this.isWalking = false;
+    }
+    this.x = this.x.clamp(0, GRID_SIZE-1);
+    this.y = this.y.clamp(0, GRID_SIZE-1);
+  }
+
   walking() {
     switch (this.direction) {
       case UP:
         this.y -= this._stepSize;
+        if ($world.grid[this.x][Math.floor(this.y).clamp(0, GRID_SIZE-1)] === 1) {
+          this.y += this._stepSize;
+        }
         break;
       case DOWN:
         this.y += this._stepSize;
+        if ($world.grid[this.x][Math.ceil(this.y).clamp(0, GRID_SIZE-1)] === 1) {
+          this.y -= this._stepSize;
+        }
         break;
       case LEFT:
         this.x -= this._stepSize;
+        if ($world.grid[Math.floor(this.x).clamp(0, GRID_SIZE-1)][this.y] === 1) {
+          this.x += this._stepSize;
+        }
         break;
       case RIGHT:
         this.x += this._stepSize;
+        if ($world.grid[Math.ceil(this.x).clamp(0, GRID_SIZE-1)][this.y] === 1) {
+          this.x -= this._stepSize;
+        }
+        break;
     }
 
     if (!this.nextFrame()) {
