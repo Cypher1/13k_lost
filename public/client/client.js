@@ -46,22 +46,20 @@
   }
 
   function update() {
-    let { width, height } = $context.canvas;
-
-    $context.clearRect(0, 0, width, height);
-    $context.fillStyle = '#E7F5FE';
-    $context.fillRect(0,0, width, height);
-
-    $world.forEach((sprite) => sprite.update());
     $player.update();
   }
 
   function render() {
+    let { width, height } = $context.canvas;
+
+    // Draw background
+    $context.fillStyle = '#E7F5FE';
+    $context.fillRect(0,0, width, height);
+
     //render the world
     $world.forEach((sprite) => sprite.render());
     // and the players on top
     $player.render();
-    // and ui on top of that?
   }
 
   function init(result) {
