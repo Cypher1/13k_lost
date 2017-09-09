@@ -1,15 +1,21 @@
 
 /*
 * The grid is represented by a 2D array of integers.
-* 0 - The tile is empty
-* 1 - The tile is a wall
+* 0 - The tile is empty (dead)
+* 1 - The tile is a wall (alive)
 * 2 - The tile is treasure?
 */
 
 const World = (function() {
   const BIRTH_LIMIT = 4,
     DEATH_LIMIT = 3,
-    NUM_SIMULATION_STEPS = 2;
+    NUM_SIMULATION_STEPS = 2,
+    TREASURE_PLACEMENT_REQUIREMENT = 5,
+    TILES = [
+      '#3355AA', // Cave floor
+      '#443333', // Wall
+      '#FFE000', // Treasure
+    ]; // number of wall cells must be around a treasure
 
   // Generate random map of size [N, N] filled with Integers
   const repeat = (fn, n) => Array(n).fill().map(fn);
@@ -28,16 +34,19 @@ const World = (function() {
 
     for (let neighbourX = x-1; neighbourX < x+2; ++neighbourX) {
       for (let neighbourY = y-1; neighbourY < y+2; ++neighbourY) {
-        if (neighbourX === x && neighbourY === y){
-          // If we're looking at the middle point do nothing, we don't want to add ourselves in!
+        if (neighbourX === x && neighbourY === y) {
+          // Don't count ourselves as a neighbour
 
         } else if (neighbourX < 0 || neighbourY < 0 || neighbourX >= map.length || neighbourX >= map[0].length) {
-          // In case the index we're looking at it off the edge of the map
+          // In case the index we're looking at it is off the edge of the map
           ++count;
 
-        } else if(map[neighbourX][neighbourY]) {
-          // Otherwise, a normal check of the neighbour
+        } else if (map[neighbourX][neighbourY] === 1) {
+          // Otherwise, just check if the neighbour is alive
           ++count;
+        } else if (map[neighbourX][neighbourY] === 2) {
+          // If there is a treasure stop counting. This should only happen when placing treasure!
+          return count;
         }
       }
     }
@@ -62,6 +71,19 @@ const World = (function() {
       })
     );
 
+  function placeTreasure(grid) {
+    for (let x = 0; x < GRID_SIZE; ++x) {
+      for (let y = 0; y < GRID_SIZE; ++y) {
+        if (!grid[x][y]) {
+          if(countAliveNeighbours(grid, x, y) >= TREASURE_PLACEMENT_REQUIREMENT) {
+            grid[x][y] = 2;  // Treasure === 2
+          }
+        }
+      }
+    }
+    return grid;
+  }
+
   /**
   * World class containing the map and world game objects.
   */
@@ -80,17 +102,13 @@ const World = (function() {
       for (let i = 0; i < NUM_SIMULATION_STEPS; ++i) {
         cellmap = doSimulationStep(cellmap);
       }
-      return cellmap;
+      return placeTreasure(cellmap);
     }
 
     render() {
       for (let x = 0; x < GRID_SIZE; ++x) {
         for (let y = 0; y < GRID_SIZE; ++y) {
-          if (this.grid[x][y]) {
-            $context.fillStyle = '#443333';
-          } else {
-            $context.fillStyle = '#3355AA';
-          }
+          $context.fillStyle = TILES[this.grid[x][y]];
           $context.fillRect(x * SQUARE_PIXEL_SIZE, y * SQUARE_PIXEL_SIZE, SQUARE_PIXEL_SIZE, SQUARE_PIXEL_SIZE);
         }
       }
