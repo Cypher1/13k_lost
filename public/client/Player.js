@@ -32,10 +32,9 @@ update() {
   moveDirection(direction) {
     if (this.direction === direction) {
       this.state = this.walking;
-      this.animate(this.walkAnimation, direction);
-    } else {
-      this.direction = direction;
     }
+    this.animate(this.walkAnimation, direction);
+    this.direction = direction;
   }
 
   stopped() {
@@ -43,6 +42,7 @@ update() {
     if(dir !== undefined) {
       this.moveDirection(dir);
     }
+
     if(this.state === this.walking) {
       /* start walking straight away */
       this.walking();
