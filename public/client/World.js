@@ -8,12 +8,12 @@ const World = (function() {
   const BIRTH_LIMIT = 4,
     DEATH_LIMIT = 3,
     NUM_SIMULATION_STEPS = 2,
-    TREASURE_PLACEMENT_REQUIREMENT = 5,
+    TREASURE_PLACEMENT_REQUIREMENT = 5, // number of wall cells must be around a treasure
     TILES = [
       '#3355AA', // Cave floor
       '#443333', // Wall
       '#FFE000', // Treasure
-    ]; // number of wall cells must be around a treasure
+    ];
 
   // Generate random map of size [N, N] filled with Integers
   const repeat = (fn, n) => Array(n).fill().map(fn);
@@ -74,7 +74,7 @@ const World = (function() {
       for (let y = 0; y < GRID_SIZE; ++y) {
         if (!grid[x][y]) {
           if(countAliveNeighbours(grid, x, y) >= TREASURE_PLACEMENT_REQUIREMENT) {
-            grid[x][y] = GRID_TILES.TREASURE;  // Treasure === 2
+            grid[x][y] = GRID_TILES.TREASURE;
           }
         }
       }

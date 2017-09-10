@@ -17,12 +17,12 @@ class Player extends AnimatedSprite {
     this.state = this.stopped;
     this.direction = DOWN;
     this.walkAnimation = [1,2,1,0];
-    this._stepSize = 1 / (this.walkAnimation.length);
+    this._stepSize = 1 / this.walkAnimation.length;
 
     this.animate(this.walkAnimation, this.direction);
   }
 
-update() {
+  update() {
     this.state();
 
     this.x = this.x.clamp(0, GRID_SIZE-1);
@@ -38,8 +38,8 @@ update() {
   }
 
   stopped() {
-    var dir = GET_DIRECTION();
-    if(dir !== undefined) {
+    let dir = GET_DIRECTION();
+    if (dir !== undefined) {
       this.moveDirection(dir);
     }
 

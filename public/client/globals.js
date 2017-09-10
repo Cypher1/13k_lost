@@ -57,8 +57,6 @@ var $context,
   SPRITE_PIXEL_SIZE = 16,
   SQUARE_PIXEL_SIZE = 16,
   SCALE = 2,
-  WORLD_SIZE = 100,
-  SCALE = 2,
   GRID_SIZE = 50,
   KEY_CODES = {
     LEFT: 37,
