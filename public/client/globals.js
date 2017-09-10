@@ -14,6 +14,18 @@ Number.prototype.clamp = function(min, max) {
   return Math.min(Math.max(this, min), max);
 };
 
+/**
+ * Returns an array of numbers in a given range (like python range)
+ *
+ * Example: Array.range(0, 3) gives [0, 1, 2]
+ *
+ * @param {Number} s The start value
+ * @param {Number} e The end value
+ * @param {Number} step The value to increment by (default is 1)
+ * @returns {Array[Number]} An array of numbers in the range [min, max) increasing by step
+ */
+Array.range = (s, e, step=1) => Array.from(Array(Math.floor((e-s)/step)), (_,i)=>step*i+s);
+
 function GET_DIRECTION() {
   if ($keys[KEY_CODES.LEFT]) {
     return LEFT;

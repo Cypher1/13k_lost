@@ -71,8 +71,22 @@
     long_grass.animate([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1], 0);
     $world = [grass, long_grass, earth1, earth2];*/
     $world = new World();
-    $player = new Player(0, SPRITE_PIXEL_SIZE, SPRITE_PIXEL_SIZE, $images['player'], Math.floor(GRID_SIZE/2), Math.floor(GRID_SIZE/2));
+
+    var pos = spawnRandomWhere(0, 0, $world.grid.length, $world.grid[0].length);
+
+    $player = new Player(0, SPRITE_PIXEL_SIZE, SPRITE_PIXEL_SIZE, $images['player'], pos.x, pos.y);
     requestAnimationFrame(frame);
+  }
+
+  function spawnRandomWhere(sx, sy, ex, ey, f) {
+    if(!f) f = pos => $world.grid[pos.x][pos.y] === GRID_TILES.EMPTY;
+    var empty = []; // should probably cache this
+    Array.range(sx, ex).forEach(
+      x => Array.range(sy, ey).forEach(
+        y => f({x,y}) && empty.push({x,y})
+      )
+    );
+    if(empty.length) return empty[Math.floor(Math.random() * empty.length)];
   }
 
   window.addEventListener('resize', windowResize);
