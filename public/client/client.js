@@ -81,11 +81,11 @@
   function spawnRandomWhere(sx, sy, ex, ey, f) {
     if(!f) f = pos => $world.grid[pos.x][pos.y] === GRID_TILES.EMPTY;
     var empty = []; // should probably cache this
-    Array.range(sx, ex).forEach(
-      x => Array.range(sy, ey).forEach(
-        y => f({x,y}) && empty.push({x,y})
-      )
-    );
+    for(let x of range(sx,ex)){
+      for(let y of range(sy,ey)){
+        if(f({x,y})) empty.push({x,y});
+      }
+    }
     if(empty.length) return empty[Math.floor(Math.random() * empty.length)];
   }
 
