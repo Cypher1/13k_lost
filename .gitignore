@@ -1,6 +1,7 @@
 dist
 .eslintrc.json
 .idea/
+img_source
 **/*.js.min
 *.log
 /node_modules

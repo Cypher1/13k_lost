@@ -15,9 +15,14 @@ class Sprite {
       height,
       image,
       x,
-      y,
+      y
     });
   }
+
+  /**
+   * Sprite does nothing by default
+   */
+  update() {}
 
   /**
    * Draw the sprite on the main canvas
@@ -37,4 +42,5 @@ class Sprite {
       SQUARE_PIXEL_SIZE
     );
   }
+
 }

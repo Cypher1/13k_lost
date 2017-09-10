@@ -14,17 +14,39 @@ Number.prototype.clamp = function(min, max) {
   return Math.min(Math.max(this, min), max);
 };
 
+function GET_DIRECTION() {
+  if ($keys[KEY_CODES.LEFT]) {
+    return LEFT;
+  } else if ($keys[KEY_CODES.UP]) {
+    return UP;
+  } else if ($keys[KEY_CODES.RIGHT]) {
+    return RIGHT;
+  } else if ($keys[KEY_CODES.DOWN]) {
+    return DOWN;
+  }
+}
+
 var $context,
   $images,
   $player,
+  $world,
   $keys = {},
+  FRAME_TIME = 70,
   SPRITE_PIXEL_SIZE = 16,
-  SQUARE_PIXEL_SIZE,
+  SQUARE_PIXEL_SIZE = 16,
   NUM_SQUARES = 12,
   SCALE = 2,
   KEY_CODES = {
     LEFT: 37,
     UP: 38,
     RIGHT: 39,
-    DOWN: 40
-  };
+    DOWN: 40,
+    SPACE: 32
+  },
+  /* DIRECTIONS ARE ALSO INDEXES INTO SPRITES */
+  DOWN = 0,
+  LEFT = 1,
+  RIGHT = 2,
+  UP = 3,
+  STOPPED = 0,
+  WALKING = 1;

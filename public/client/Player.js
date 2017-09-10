@@ -1,6 +1,6 @@
 'use strict';
 
-class Player extends Sprite {
+class Player extends AnimatedSprite {
   /**
    * Constructor
    * @param {Integer} [id] - id of the player in the game
@@ -14,64 +14,58 @@ class Player extends Sprite {
     super(width, height, image, x, y);
 
     this.id = id;
-    this.sx = 0;
-    this.sy = 0;
-    this.isWalking = false;
+    this.state = this.stopped;
+    this.direction = DOWN;
     this.walkAnimation = [1,2,1,0];
-    this._stepSize = 1 / (this.walkAnimation.length)
-  }
+    this._stepSize = 1 / (this.walkAnimation.length);
 
-  moveDirection(direction) {
-    if (this.sy === direction) {
-      this.isWalking = true;
-    } else {
-      this.sy = direction;
-    }
+    this.animate(this.walkAnimation, this.direction);
   }
 
   update() {
-    if (!this.isWalking) {
+    this.state();
 
-      if ($keys[KEY_CODES.LEFT]) {
-        this.moveDirection(1);
-      } else if ($keys[KEY_CODES.UP]) {
-        this.moveDirection(3);
-      } else if ($keys[KEY_CODES.RIGHT]) {
-        this.moveDirection(2);
-      } else if ($keys[KEY_CODES.DOWN]) {
-        this.moveDirection(0);
-      } else {
-        this.isWalking = false;
-      }
-    }
-
-    if (this.isWalking) {
-      switch (this.sy) {
-        case 0:
-          this.y += this._stepSize;
-          break;
-        case 1:
-          this.x -= this._stepSize;
-          break;
-        case 2:
-          this.x += this._stepSize;
-          break;
-        case 3:
-          this.y -= this._stepSize;
-      }
-      if (++this.sx === this.walkAnimation.length) {
-        this.isWalking = false;
-        this.sx = 0;
-
-      }
-    } else {
-      this.isWalking = false;
-    }
     this.x = this.x.clamp(0, NUM_SQUARES-1);
     this.y = this.y.clamp(0, NUM_SQUARES-1);
   }
 
-  render() {
-    super.render(this.walkAnimation[this.sx] * SPRITE_PIXEL_SIZE, this.sy * SPRITE_PIXEL_SIZE);
+  moveDirection(direction) {
+    if (this.direction === direction) {
+      this.state = this.walking;
+      this.animate(this.walkAnimation, direction);
+    } else {
+      this.direction = direction;
+    }
+  }
+
+  stopped() {
+    var dir = GET_DIRECTION();
+    if(dir !== undefined) {
+      this.moveDirection(dir);
+    }
+    if(this.state === this.walking) {
+      /* start walking straight away */
+      this.walking();
+    }
+  }
+
+  walking() {
+    switch (this.direction) {
+      case UP:
+        this.y -= this._stepSize;
+        break;
+      case DOWN:
+        this.y += this._stepSize;
+        break;
+      case LEFT:
+        this.x -= this._stepSize;
+        break;
+      case RIGHT:
+        this.x += this._stepSize;
+    }
+
+    if (!this.nextFrame()) {
+      this.state = this.stopped;
+    }
   }
 }
