@@ -55,4 +55,12 @@ var $context,
   RIGHT = 2,
   UP = 3,
   STOPPED = 0,
-  WALKING = 1;
+  WALKING = 1,
+  GRID_TILES = {
+    /* 0 - The tile is empty (dead) */
+    EMPTY: 0,
+    /* 1 - The tile is a wall (alive) */
+    WALL: 1,
+    /* 2 - The tile is treasure */
+    TREASURE: 2
+  };

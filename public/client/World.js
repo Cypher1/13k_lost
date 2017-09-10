@@ -1,9 +1,7 @@
 
 /*
-* The grid is represented by a 2D array of integers.
-* 0 - The tile is empty (dead)
-* 1 - The tile is a wall (alive)
-* 2 - The tile is treasure?
+ * The grid is represented by a 2D array of integers.
+ * See GRID_TILES in globals.js for the codes of each tile
 */
 
 const World = (function() {
@@ -41,10 +39,10 @@ const World = (function() {
           // In case the index we're looking at it is off the edge of the map
           ++count;
 
-        } else if (map[neighbourX][neighbourY] === 1) {
+        } else if (map[neighbourX][neighbourY] === GRID_TILES.WALL) {
           // Otherwise, just check if the neighbour is alive
           ++count;
-        } else if (map[neighbourX][neighbourY] === 2) {
+        } else if (map[neighbourX][neighbourY] === GRID_TILES.TREASURE) {
           // If there is a treasure stop counting. This should only happen when placing treasure!
           return count;
         }
@@ -76,7 +74,7 @@ const World = (function() {
       for (let y = 0; y < GRID_SIZE; ++y) {
         if (!grid[x][y]) {
           if(countAliveNeighbours(grid, x, y) >= TREASURE_PLACEMENT_REQUIREMENT) {
-            grid[x][y] = 2;  // Treasure === 2
+            grid[x][y] = GRID_TILES.TREASURE;  // Treasure === 2
           }
         }
       }
