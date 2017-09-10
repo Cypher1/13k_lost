@@ -29,7 +29,7 @@
     $context.canvas.width = size;
     $context.canvas.height = size;
     $context.imageSmoothingEnabled = false;
-    SQUARE_PIXEL_SIZE = size / GRID_SIZE;
+    SQUARE_PIXEL_SIZE = size / (CAMERA_SIZE+1);
   }
 
   var now,
@@ -47,6 +47,7 @@
 
   function update() {
     $player.update();
+    $camera.update();
   }
 
   function render() {
@@ -71,6 +72,7 @@
     long_grass.animate([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1], 0);
     $world = [grass, long_grass, earth1, earth2];*/
     $world = new World();
+    $camera = new Camera();
 
     var pos = spawnRandomWhere(0, 0, $world.grid.length, $world.grid[0].length);
 

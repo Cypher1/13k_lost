@@ -104,12 +104,14 @@ const World = (function() {
     }
 
     render() {
+      $context.save();
       for (let x = 0; x < GRID_SIZE; ++x) {
         for (let y = 0; y < GRID_SIZE; ++y) {
           $context.fillStyle = TILES[this.grid[x][y]];
           $context.fillRect(x * SQUARE_PIXEL_SIZE, y * SQUARE_PIXEL_SIZE, SQUARE_PIXEL_SIZE, SQUARE_PIXEL_SIZE);
         }
       }
+      $context.restore();
     }
   }
 

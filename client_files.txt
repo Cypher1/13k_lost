@@ -2,6 +2,7 @@ public/shared.js
 public/client/globals.js
 public/client/Sprite.js
 public/client/AnimatedSprite.js
+public/client/Camera.js
 public/client/World.js
 public/client/Player.js
 public/client/client.js
