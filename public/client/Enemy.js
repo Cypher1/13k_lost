@@ -4,6 +4,8 @@ const Enemy = (function() {
   class Enemy extends AnimatedSprite {
     constructor(width, height, image, x, y) {
       super(width, height, image, x, y);
+
+      this.chasingPlayer = false;
     }
 
     isPlayerInLineOfSight(isXAxis, lowerBound, upperBound) {
@@ -54,6 +56,18 @@ const Enemy = (function() {
       }
     }
 
-    update()
+    moveTowardsPlayer() {
+      // A* search. If the player is more than 10 tiles away give up and stop chasing?
+    }
+
+    update() {
+      if (this.canSeePlayer) {
+        this.chasingPlayer = true;
+      }
+
+      if (this.chasingPlayer) {
+        moveTowardsPlayer()
+      }
+    }
   }
 })();
