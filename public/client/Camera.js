@@ -6,7 +6,7 @@ class Camera {
   }
 
   clampCoordinate(coordinate) {
-    return (coordinate - (CAMERA_SIZE/2)).clamp(0, GRID_SIZE - CAMERA_SIZE);
+    return (coordinate - (CAMERA_SIZE/2)).clamp(0, GRID_SIZE-1 - CAMERA_SIZE);
   }
 
   update() {
