@@ -4,6 +4,7 @@ public/client/Sprite.js
 public/client/AnimatedSprite.js
 public/client/Camera.js
 public/client/World.js
+public/client/Enemy.js
 public/client/Player.js
 public/client/client.js
 public/client/keyboardEvents.js
