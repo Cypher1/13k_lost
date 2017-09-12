@@ -79,6 +79,8 @@ class Player extends AnimatedSprite {
 
     if (!this.nextFrame()) {
       this.state = this.stopped;
+      this.x = Math.round(this.x);
+      this.y = Math.round(this.y);
     }
   }
 }
