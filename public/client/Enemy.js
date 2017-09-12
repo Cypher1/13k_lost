@@ -3,9 +3,6 @@
 const Enemy = (function() {
   const VISION_DISTANCE = 6;
 
-  // Check if the unit is moving (animating between squares)
-  // const isMoving = unit => unit.x % 1 === 0 && unit.y % 1 === 0;
-
   class Node {
     constructor(x, y, g, parent, dir) {
       Object.assign(this, {
@@ -25,7 +22,7 @@ const Enemy = (function() {
       super(id, width, height, image, x, y);
 
       this.chasingPlayer = false;
-      this.walkAnimation = [1,2,1,2,0];
+      this.walkAnimation = [6,7,8,7,6];
       this._stepSize = 1 / this.walkAnimation.length;
 
       this.animate(this.walkAnimation, this.direction);
@@ -33,8 +30,8 @@ const Enemy = (function() {
 
     isPlayerInLineOfSight(sharedAxis, lowerBound, upperBound) {
       let getCellValue = sharedAxis === 'y'
-        ? x => {console.log(x, this.y); return $world.grid[x][this.y]}
-        : y => {console.log(this.x, y); return $world.grid[this.x][y]};
+        ? x => $world.grid[x][this.y]
+        : y => $world.grid[this.x][y];
 
       for (let i = lowerBound; i < upperBound; ++i) {
         if (getCellValue(i) !== 0) {

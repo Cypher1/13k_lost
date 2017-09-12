@@ -3,7 +3,7 @@
 (function() {
   let socket, //Socket.IO client
     canvas = document.getElementById('cvs'),
-    IMAGES = ['player', 'grass', 'long_grass', 'earth'];
+    IMAGES = ['characters', 'grass', 'long_grass', 'earth'];
 
   $context = canvas.getContext('2d');
   windowResize();
@@ -83,8 +83,8 @@
     var pos = spawnRandomWhere(0, 0, $world.grid.length, $world.grid[0].length);
     var pos2 = spawnRandomWhere(0, 0, $world.grid.length, $world.grid[0].length);
 
-    $player = new Player(0, SPRITE_PIXEL_SIZE, SPRITE_PIXEL_SIZE, $images['player'], pos.x, pos.y);
-    $enemies.push(new Enemy(1, SPRITE_PIXEL_SIZE, SPRITE_PIXEL_SIZE, $images['player'], pos2.x, pos2.y));
+    $player = new Player(0, SPRITE_PIXEL_SIZE, SPRITE_PIXEL_SIZE, $images['characters'], pos.x, pos.y);
+    $enemies.push(new Enemy(1, SPRITE_PIXEL_SIZE, SPRITE_PIXEL_SIZE, $images['characters'], pos2.x, pos2.y));
     requestAnimationFrame(frame);
   }
 
