@@ -131,6 +131,15 @@ const Enemy = (function() {
       }
     }
 
+    randomMove() {
+      if (Math.random() < .3) {
+        this.moveDirection(Math.floor(Math.random() * 4));
+      } else {
+        this.moveDirection(this.direction);
+      }
+    }
+
+    // don't listen to keyboard events. do nothing when stopped
     stopped() {}
 
     update() {
@@ -142,6 +151,8 @@ const Enemy = (function() {
         if (this.canSeePlayer()) {
           console.log('I CAN SEE THE PLAYER');
           this.chasingPlayer = true;
+        } else {
+          this.randomMove();
         }
 
         if (this.chasingPlayer) {
@@ -150,6 +161,8 @@ const Enemy = (function() {
           let nextMove = this.searchForPlayer();
           if (nextMove) {
             this.moveDirection(nextMove.dir);
+          } else {
+            this.randomMove();
           }
         }
       }
