@@ -77,9 +77,9 @@ const Enemy = (function() {
 				{x: self.x, y: self.y+1}
 			];
 			let neighbours = [];
-			for (node of potentialNeighbours) {
+			for (let node of potentialNeighbours) {
 				if ($grid[node.x] && $grid[node.x][node.y] <= 0) {	// exists and is walkable
-					 neighbours.push(new Node(node.x, node.y, self.g+1, self));
+					 neighbours.push(new Node(node.x, node.y, self.g+1, self.id));
 				}
 			}
 			return neighbours;
@@ -87,12 +87,18 @@ const Enemy = (function() {
 		
 		reconstructPath(visited, curr) {
 			// recreate path
+      let path = [curr];
+      while (curr.parent !== '') {
+        curr = visited.get(curr.parent);
+        path.push(curr);
+      }
+      return path;
 		}
 
     moveTowardsPlayer() {
       // A* search. If the player is more than 10 tiles away give up and stop chasing?
 			let visited = new Map();
-			let openList = [new Node(this.x, this.y, 0, null)];
+			let openList = [new Node(this.x, this.y, 0, '')];
 			
 			while (openList.length > 0) {
 				openList.sort((a, b) => a.f > b.f); // shhh, I'm a priority queue :P
