@@ -1,3 +1,4 @@
+public/client/TinyMusic.min.js
 public/client/globals.js
 public/client/Sprite.js
 public/client/AnimatedSprite.js
