@@ -45,39 +45,6 @@ const Enemy = (function() {
       this.animate(this.walkAnimation, this.direction);
     }
 
-    isPlayerInLineOfSight(sharedAxis, lowerBound, upperBound) {
-      let getCellValue = sharedAxis === 'y'
-        ? x => $world.grid[x][this.y]
-        : y => $world.grid[this.x][y];
-
-      for (let i = lowerBound; i < upperBound; ++i) {
-        if (getCellValue(i) !== 0) {
-          return false;
-        }
-      }
-      return true;
-    }
-
-    checkDirection(sharedAxis, axisToCheckLowerBound, axisToCheckUpperBound) {
-      return this[sharedAxis] === this.target[sharedAxis] &&
-        axisToCheckLowerBound < axisToCheckUpperBound &&
-        axisToCheckUpperBound - axisToCheckLowerBound < VISION_DISTANCE &&
-        this.isPlayerInLineOfSight(sharedAxis, axisToCheckLowerBound, axisToCheckUpperBound);
-    }
-
-    canSeePlayer() {
-      switch (this.direction) {
-        case DOWN:
-          return this.checkDirection('x', this.y, this.target.y);
-        case LEFT:
-          return this.checkDirection('y', this.target.x, this.x);
-        case RIGHT:
-          return this.checkDirection('y', this.x, this.target.x);
-        case UP:
-          return this.checkDirection('x', this.target.y, this.y);
-      }
-    }
-
     reconstructPath(visited, curr) {
       // recreate path
       let path = [];
@@ -85,7 +52,7 @@ const Enemy = (function() {
         path.unshift(curr.dir);
         curr = curr.parent;
       }
-      this.path = path;
+      return path;
     }
 
     goTo(x, y) {
@@ -97,8 +64,8 @@ const Enemy = (function() {
         visited.set(curr.id, curr);
 
 
-        if ((curr.g > VISION_DISTANCE+3) || (curr.x === coords.x && curr.y === coords.y)){
-          this.reconstructPath(visited, curr);
+        if ((curr.g > VISION_DISTANCE+10) || (curr.x === coords.x && curr.y === coords.y)){
+          this.path = this.reconstructPath(visited, curr);
           return;
         }
 
@@ -115,7 +82,7 @@ const Enemy = (function() {
           }
         }
       }
-      return [];
+      this.getRandomMove();
     }
 
     getRandomMove() {
@@ -127,17 +94,20 @@ const Enemy = (function() {
 
     // don't listen to keyboard events. work out where to go next
     stopped() {
-      if(this.path.length > 0) {
-        this.moveDirection(this.path.shift(), true);
-        this.state();
-      } else {
-        if (this.canSeePlayer()) {
-          console.log('I CAN SEE THE PLAYER');
-          this.goTo($player.x, $player.y);
-        } else {
+      if(this.path.length === 0 || this.path.length > 10) {
+        // looking
+        this.goTo($player.x, $player.y);
+        if (this.path.length > 10) {
+          // we lost them
           this.getRandomMove();
+          return this.state();
+        } else {
+          console.log('I CAN SEE THE PLAYER');
         }
       }
+      // chase
+      this.moveDirection(this.path.shift(), true);
+      this.state();
     }
   }
 
