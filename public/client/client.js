@@ -37,7 +37,7 @@
 
   function frame() {
     now = Date.now();
-    if (now - last >= FRAME_TIME) {
+    if (now - last >= FRAME_TIME && !$game.ended) {
       update();
       last = now;
     }
