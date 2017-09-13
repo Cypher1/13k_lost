@@ -96,7 +96,7 @@
     var pos = spawnRandomWhere(0, 0, $world.grid.length, $world.grid[0].length);
     $player = new Player(0, SPRITE_PIXEL_SIZE, SPRITE_PIXEL_SIZE, $images['player'], pos.x, pos.y);
 
-    for (let i of range(1,9)) {
+    for (let i of range(1,13)) {
       let enemyPos = spawnRandomWhere(0, 0, $world.grid.length, $world.grid[0].length);
       $enemies.push(new Enemy(i, SPRITE_PIXEL_SIZE, SPRITE_PIXEL_SIZE, $images['enemies'], enemyPos.x, enemyPos.y));
     }
