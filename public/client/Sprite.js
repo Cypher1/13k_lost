@@ -43,4 +43,18 @@ class Sprite {
     );
   }
 
+  shadow() {
+    let dx= ($player.x-this.x);
+    let dy= ($player.y-this.y);
+    let d = 0.01*Math.pow(dx*dx+dy*dy, 1.3);
+
+    $context.globalAlpha = d;
+    $context.fillRect(
+      this.x * SQUARE_PIXEL_SIZE-0.5,
+      this.y * SQUARE_PIXEL_SIZE-0.5,
+      SQUARE_PIXEL_SIZE+1,
+      SQUARE_PIXEL_SIZE+1
+    );
+    $context.globalAlpha = 1;
+  }
 }
