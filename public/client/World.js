@@ -8,12 +8,8 @@ const World = (function() {
   const BIRTH_LIMIT = 4,
     DEATH_LIMIT = 3,
     NUM_SIMULATION_STEPS = 2,
-    TREASURE_PLACEMENT_REQUIREMENT = 5, // number of wall cells must be around a treasure
-    TILES = [
-      new Sprite(SPRITE_PIXEL_SIZE, SPRITE_PIXEL_SIZE, $images['earth'], -1, -1), // Cave floor
-      new Sprite(SPRITE_PIXEL_SIZE, SPRITE_PIXEL_SIZE, $images['wall'], -1, -1), // Wall
-      new Sprite(SPRITE_PIXEL_SIZE, SPRITE_PIXEL_SIZE, $images['treasure'], -1, -1), // Treasure
-    ];
+    TREASURE_PLACEMENT_REQUIREMENT = 5; // number of wall cells must be around a treasure
+    
 
   // Generate random map of size [N, N] filled with Integers
   const repeat = (fn, n) => Array(n).fill().map(fn);
@@ -88,6 +84,11 @@ const World = (function() {
   class World {
     constructor() {
       this.grid = this.generateMap();
+			this.tiles = [
+				new Sprite(SPRITE_PIXEL_SIZE, SPRITE_PIXEL_SIZE, $images['earth'], -1, -1),     // Cave floor
+				new Sprite(SPRITE_PIXEL_SIZE, SPRITE_PIXEL_SIZE, $images['wall'], -1, -1),      // Wall
+				new Sprite(SPRITE_PIXEL_SIZE, SPRITE_PIXEL_SIZE, $images['treasure'], -1, -1),  // Treasure
+			];
     }
 
     /**
@@ -106,7 +107,7 @@ const World = (function() {
     render() {
       for (let x = 0; x < GRID_SIZE; ++x) {
         for (let y = 0; y < GRID_SIZE; ++y) {
-          let tile = TILES[this.grid[x][y]];
+          let tile = this.tiles[this.grid[x][y]];
           tile.x = x;
           tile.y = y;
           tile.render();
