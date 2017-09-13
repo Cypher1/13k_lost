@@ -4,7 +4,7 @@ const Enemy = (function() {
   const VISION_DISTANCE = 6;
 
   class Node {
-    constructor(x, y, g, parent, dir) {
+    constructor(x, y, g, parent, goto, dir) {
       Object.assign(this, {
         id: x + ',' + y,
         parent,
@@ -12,8 +12,24 @@ const Enemy = (function() {
         x,
         y,
         g, // cost so far
-        f: g + Math.abs(Math.round($player.x) - x) + Math.abs(Math.round($player.y) - y) // f = g + heuristic
+        f: g + Math.abs(goto.x - x) + Math.abs(goto.y - y) // f = g + heuristic
       });
+    }
+
+    getNeighbours(goto) {
+      let neighbours = [
+        {x:this.x - 1, y:this.y,     d:LEFT},
+        {x:this.x + 1, y:this.y,     d:RIGHT},
+        {x:this.x,     y:this.y - 1, d:UP},
+        {x:this.x,     y:this.y + 1, d:DOWN}
+      ];
+
+      return neighbours.map(
+        n => new Node(n.x, n.y, this.g+1, this, goto, n.d)
+      ).filter(
+        // exists and is walkable
+        node => ($world.grid[node.x] && $world.grid[node.x][node.y] <= GRID_TILES.EMPTY)
+      );
     }
   }
 
@@ -21,7 +37,8 @@ const Enemy = (function() {
     constructor(id, width, height, image, x, y) {
       super(id, width, height, image, x, y);
 
-      this.chasingPlayer = false;
+      this.path = [];
+      this.target = $player;
       this.walkAnimation = [6,7,8,7,6];
       this._stepSize = 1 / this.walkAnimation.length;
 
@@ -42,7 +59,7 @@ const Enemy = (function() {
     }
 
     checkDirection(sharedAxis, axisToCheckLowerBound, axisToCheckUpperBound) {
-      return this[sharedAxis] === this.playerCoords[sharedAxis] &&
+      return this[sharedAxis] === this.target[sharedAxis] &&
         axisToCheckLowerBound < axisToCheckUpperBound &&
         axisToCheckUpperBound - axisToCheckLowerBound < VISION_DISTANCE &&
         this.isPlayerInLineOfSight(sharedAxis, axisToCheckLowerBound, axisToCheckUpperBound);
@@ -51,74 +68,41 @@ const Enemy = (function() {
     canSeePlayer() {
       switch (this.direction) {
         case DOWN:
-          return this.checkDirection('x', this.y, this.playerCoords.y);
+          return this.checkDirection('x', this.y, this.target.y);
         case LEFT:
-          return this.checkDirection('y', this.playerCoords.x, this.x);
+          return this.checkDirection('y', this.target.x, this.x);
         case RIGHT:
-          return this.checkDirection('y', this.x, this.playerCoords.x);
+          return this.checkDirection('y', this.x, this.target.x);
         case UP:
-          return this.checkDirection('x', this.playerCoords.y, this.y);
+          return this.checkDirection('x', this.target.y, this.y);
       }
-    }
-
-    getMyNeighbours(self) {
-      let potentialNeighbours = [
-        {
-          x: self.x - 1,
-          y: self.y,
-          dir: LEFT
-        }, {
-          x: self.x + 1,
-          y: self.y,
-          dir: RIGHT
-        }, {
-          x: self.x,
-          y: self.y - 1,
-          dir: UP
-        }, {
-          x: self.x,
-          y: self.y + 1,
-          dir: DOWN
-        }
-      ];
-
-      let neighbours = [];
-      for (let node of potentialNeighbours) {
-        if ($world.grid[node.x] && $world.grid[node.x][node.y] <= 0) { // exists and is walkable
-          neighbours.push(new Node(node.x, node.y, self.g + 1, self.id, node.dir));
-        }
-      }
-      return neighbours;
     }
 
     reconstructPath(visited, curr) {
       // recreate path
-      let path = [curr];
-      while (curr.parent !== '') {
-        curr = visited.get(curr.parent);
-        path.unshift(curr);
+      let path = [];
+      while (curr.parent) {
+        path.unshift(curr.dir);
+        curr = curr.parent;
       }
-      return path[1];
+      this.path = path;
     }
 
-    searchForPlayer() {
+    goTo(x, y) {
+      let coords = {x: Math.round(x),y: Math.round(y)};
       let visited = new Map();
-      let openList = [new Node(this.x, this.y, 0, '', null)];
+      let openList = [new Node(this.x, this.y, 0, null, coords, null)];
       while (openList.length > 0) {
-        openList.sort((a, b) => a.f > b.f); // shhh, I'm a priority queue :P
-
         let curr = openList.shift();
-
-        if (curr.g > VISION_DISTANCE+3) {
-          return
-        }
-        if (curr.x === this.playerCoords.x && curr.y === this.playerCoords.y) {
-          return this.reconstructPath(visited, curr);
-        }
-
         visited.set(curr.id, curr);
 
-        for (let neighbour of this.getMyNeighbours(curr)) {
+
+        if ((curr.g > VISION_DISTANCE+3) || (curr.x === coords.x && curr.y === coords.y)){
+          this.reconstructPath(visited, curr);
+          return;
+        }
+
+        for (let neighbour of curr.getNeighbours(coords)) {
           if (!visited.has(neighbour.id)) {
             let sameNodeIndex = openList.findIndex(node => node.id === curr.id);
             if (sameNodeIndex === -1) {
@@ -126,48 +110,34 @@ const Enemy = (function() {
             } else if (neighbour.g < openList[sameNodeIndex].g) {
               openList[sameNodeIndex] = neighbour;
             }
+            // sort after edit so that we don't sort when not changing the list
+            openList.sort((a, b) => a.f > b.f); // shhh, I'm a priority queue :P
           }
         }
       }
+      return [];
     }
 
-    randomMove() {
+    getRandomMove() {
       if (Math.random() < .3) {
-        this.moveDirection(Math.floor(Math.random() * 4));
-      } else {
-        this.moveDirection(this.direction);
+        this.direction = Math.floor(Math.random() * 4);
       }
+      this.moveDirection(this.direction); // state is now walking (will go back to stopped)
     }
 
-    // don't listen to keyboard events. do nothing when stopped
-    stopped() {}
-
-    update() {
-      this.playerCoords = {
-        x: Math.round($player.x),
-        y: Math.round($player.y)
-      }
-      if (this.state === this.stopped) {
+    // don't listen to keyboard events. work out where to go next
+    stopped() {
+      if(this.path.length > 0) {
+        this.moveDirection(this.path.shift(), true);
+        this.state();
+      } else {
         if (this.canSeePlayer()) {
           console.log('I CAN SEE THE PLAYER');
-          this.chasingPlayer = true;
+          this.goTo($player.x, $player.y);
         } else {
-          this.randomMove();
-        }
-
-        if (this.chasingPlayer) {
-
-          console.log('running A*');
-          let nextMove = this.searchForPlayer();
-          if (nextMove) {
-            this.moveDirection(nextMove.dir);
-          } else {
-            this.randomMove();
-          }
+          this.getRandomMove();
         }
       }
-
-      super.update();
     }
   }
 

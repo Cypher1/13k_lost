@@ -28,18 +28,18 @@ class Player extends AnimatedSprite {
     this.x = this.x.clamp(0, GRID_SIZE-1);
     this.y = this.y.clamp(0, GRID_SIZE-1);
   }
-  
+
   die() {
     this.animate([0], DEAD);
     $game.ended = true;
   }
 
-  moveDirection(direction) {
-    if (this.direction === direction) {
+  moveDirection(dir, force=false) {
+    if (force || this.direction === dir) {
       this.state = this.walking;
     }
-    this.animate(this.walkAnimation, direction);
-    this.direction = direction;
+    this.animate(this.walkAnimation, dir);
+    this.direction = dir;
   }
 
   stopped() {
