@@ -105,13 +105,8 @@ const World = (function() {
     }
 
     do(f) {
-      var camMinX = Math.floor($camera.x).clamp(0, GRID_SIZE);
-      var camMinY = Math.floor($camera.y).clamp(0, GRID_SIZE);
-      var camMaxX = Math.ceil($camera.x + CAMERA_SIZE).clamp(0, GRID_SIZE);
-      var camMaxY = Math.ceil($camera.y + CAMERA_SIZE).clamp(0, GRID_SIZE);
-
-      for (let x = camMinX; x < camMaxX; ++x) {
-        for (let y = camMinY; y < camMaxY; ++y) {
+      for (let x = $camera.minX; x < $camera.maxX; ++x) {
+        for (let y = $camera.minY; y < $camera.maxY; ++y) {
           let tile = this.tiles[this.grid[x][y]];
           tile.x = x;
           tile.y = y;

@@ -63,6 +63,11 @@
   }
 
   function render() {
+    $camera.minX = Math.floor($camera.x).clamp(0, GRID_SIZE);
+    $camera.minY = Math.floor($camera.y).clamp(0, GRID_SIZE);
+    $camera.maxX = Math.ceil($camera.x + CAMERA_SIZE+1).clamp(0, GRID_SIZE);
+    $camera.maxY = Math.ceil($camera.y + CAMERA_SIZE+1).clamp(0, GRID_SIZE);
+
     let { width, height } = $context.canvas;
     $context.clearRect(0, 0, width, height);
 
@@ -71,7 +76,10 @@
     // Draw player
     $player.render();
     for (let enemy of $enemies) {
-      enemy.render();
+      if((enemy.x >= $camera.minX && enemy.x <= $camera.maxX)
+      && (enemy.y >= $camera.minY && enemy.y <= $camera.maxY)) {
+        enemy.render();
+      }
     }
     $world.shadow();
   }
