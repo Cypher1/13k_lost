@@ -31,15 +31,25 @@
       background: rgba(0, 0, 0, 0.62);
       padding: 9px;
       top: 0;
-      right: 0;
       color: white;
       font-family: sans-serif;
+      text-align: center;
+    }
+    button {
+      background: #597dce;
+      color: white;
+      font-size: 22px;
+      padding: 8px 24px;
     }
   </style>
 </head>
 
 <body>
-  <div>
+  <div id="dead" style="display:none">
+    <p>YOU LOST!</p>
+    <button onclick="location.reload()">GO AGAIN</button>
+  </div>
+  <div style="right:0">
     Chests opened: <span id="chests">0</span>
   </div>
   <canvas id="cvs"></canvas>

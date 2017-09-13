@@ -13,7 +13,7 @@ const World = (function() {
 
   // Generate random map of size [N, N] filled with Integers
   const repeat = (fn, n) => Array(n).fill().map(fn);
-  const randInteger = () => int(Math.random() < .4);
+  const randInteger = () => int(Math.random() < .37);
   const randomMap = n => repeat(() => repeat(randInteger, n), n);
 
   /**

@@ -52,17 +52,16 @@
 
     if ($world.grid[Math.round($player.x)][Math.round($player.y)] === GRID_TILES.TREASURE) {
       $world.grid[Math.round($player.x)][Math.round($player.y)] = 0;
-      let elem = document.getElementById('chests');
-      elem.innerHTML = ++$game.chests;
+      document.getElementById('chests').innerHTML = ++$game.chests;
     }
 
     for (let enemy of $enemies) {
       enemy.update();
 
-      if (Math.abs(enemy.x - $player.x) < .7 && Math.abs(enemy.y - $player.y) < .7) {
+      if (Math.abs(enemy.x - $player.x) < .4 && Math.abs(enemy.y - $player.y) < .4) {
         $player.die();
         $game.ended = true;
-        setTimeout(function() { alert('refresh to restart') }, 500)
+        document.getElementById('dead').style.display = 'block';
       }
     }
 
@@ -97,9 +96,9 @@
     var pos = spawnRandomWhere(0, 0, $world.grid.length, $world.grid[0].length);
     $player = new Player(0, SPRITE_PIXEL_SIZE, SPRITE_PIXEL_SIZE, $images['player'], pos.x, pos.y);
 
-    for (let i of range(0,13)) {
+    for (let i of range(1,9)) {
       let enemyPos = spawnRandomWhere(0, 0, $world.grid.length, $world.grid[0].length);
-      $enemies.push(new Enemy(i+1, SPRITE_PIXEL_SIZE, SPRITE_PIXEL_SIZE, $images['enemies'], enemyPos.x, enemyPos.y));
+      $enemies.push(new Enemy(i, SPRITE_PIXEL_SIZE, SPRITE_PIXEL_SIZE, $images['enemies'], enemyPos.x, enemyPos.y));
     }
 
     requestAnimationFrame(frame);
