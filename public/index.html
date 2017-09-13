@@ -28,7 +28,7 @@
     }
     div {
       position: absolute;
-      background: rgba(0, 0, 0, 0.62);
+      background: rgba(0, 0, 0, 0.6);
       padding: 9px;
       top: 0;
       color: white;
@@ -40,18 +40,24 @@
       color: white;
       font-size: 22px;
       padding: 8px 24px;
+      border: none;
+    }
+    .msg {
+      display: none;
+      font-size: 20px;
     }
   </style>
 </head>
 
 <body>
-  <div id="dead" style="display:none">
+  <div id="dead" class="msg">
     <p>YOU LOST!</p>
     <button onclick="location.reload()">GO AGAIN</button>
   </div>
   <div style="right:0">
     Chests opened: <span id="chests">0</span>
   </div>
+  <div id="paused" class="msg" style="top:auto">PAUSED</div>
   <canvas id="cvs"></canvas>
 
   <!-- DEV START -->

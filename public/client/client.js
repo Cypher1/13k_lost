@@ -120,10 +120,12 @@
   window.onblur = () => {
     $game.paused = true;
     $keys = {};
+    document.getElementById('paused').style.display = 'block';
   }
 
   window.onfocus = () => {
     if ($game.paused) {
+      document.getElementById('paused').style.display = 'none';
       $game.paused = false;
       requestAnimationFrame(frame);
     }
