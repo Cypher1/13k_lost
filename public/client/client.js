@@ -3,7 +3,7 @@
 (function() {
   let socket, //Socket.IO client
     canvas = document.getElementById('cvs'),
-    IMAGES = ['characters', 'earth', 'wall', 'treasure'];
+    IMAGES = ['player', 'enemies', 'earth', 'wall', 'treasure'];
 
   $context = canvas.getContext('2d');
   windowResize();
@@ -42,14 +42,22 @@
       last = now;
     }
     render();
-    requestAnimationFrame(frame);
+    if (!$game.paused) {
+      requestAnimationFrame(frame);
+    }
   }
 
   function update() {
+    $player.update();
     for (let enemy of $enemies) {
       enemy.update();
+
+      if (Math.abs(enemy.x - $player.x) < .7 && Math.abs(enemy.y - $player.y) < .7) {
+        $player.die();
+        $game.ended = true;
+        setTimeout(function() { alert('refresh to restart') }, 500)
+      }
     }
-    $player.update();
 
     $camera.update();
   }
@@ -70,22 +78,18 @@
 
   function init(result) {
     $images = result;
-    // socket = io({upgrade: false, transports: ['websocket']});
 
-    /*    var grass = new AnimatedSprite(SPRITE_PIXEL_SIZE, SPRITE_PIXEL_SIZE, $images['grass'], 0, 0);
-    var earth1 = new AnimatedSprite(SPRITE_PIXEL_SIZE, SPRITE_PIXEL_SIZE, $images['earth'], 0, 1);
-    var earth2 = new AnimatedSprite(SPRITE_PIXEL_SIZE, SPRITE_PIXEL_SIZE, $images['earth'], 1, 1);
-    var long_grass = new AnimatedSprite(SPRITE_PIXEL_SIZE, SPRITE_PIXEL_SIZE, $images['long_grass'], 1, 0);
-    long_grass.animate([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1], 0);
-    $world = [grass, long_grass, earth1, earth2];*/
     $world = new World();
     $camera = new Camera();
 
     var pos = spawnRandomWhere(0, 0, $world.grid.length, $world.grid[0].length);
-    var pos2 = spawnRandomWhere(0, 0, $world.grid.length, $world.grid[0].length);
+    $player = new Player(0, SPRITE_PIXEL_SIZE, SPRITE_PIXEL_SIZE, $images['player'], pos.x, pos.y);
 
-    $player = new Player(0, SPRITE_PIXEL_SIZE, SPRITE_PIXEL_SIZE, $images['characters'], pos.x, pos.y);
-    $enemies.push(new Enemy(1, SPRITE_PIXEL_SIZE, SPRITE_PIXEL_SIZE, $images['characters'], pos2.x, pos2.y));
+    for (let i of range(0,13)) {
+      let enemyPos = spawnRandomWhere(0, 0, $world.grid.length, $world.grid[0].length);
+      $enemies.push(new Enemy(i+1, SPRITE_PIXEL_SIZE, SPRITE_PIXEL_SIZE, $images['enemies'], enemyPos.x, enemyPos.y));
+    }
+
     requestAnimationFrame(frame);
   }
 
@@ -101,5 +105,17 @@
   }
 
   window.addEventListener('resize', windowResize);
+
+  window.onblur = () => {
+    $game.paused = true;
+    $keys = {};
+  }
+
+  window.onfocus = () => {
+    if ($game.paused) {
+      $game.paused = false;
+      requestAnimationFrame(frame);
+    }
+  }
   loadImages(init);
 })();

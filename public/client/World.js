@@ -2,14 +2,14 @@
 /*
  * The grid is represented by a 2D array of integers.
  * See GRID_TILES in globals.js for the codes of each tile
-*/
+ */
 
 const World = (function() {
   const BIRTH_LIMIT = 4,
     DEATH_LIMIT = 3,
     NUM_SIMULATION_STEPS = 2,
     TREASURE_PLACEMENT_REQUIREMENT = 5; // number of wall cells must be around a treasure
-    
+
 
   // Generate random map of size [N, N] filled with Integers
   const repeat = (fn, n) => Array(n).fill().map(fn);
@@ -17,12 +17,12 @@ const World = (function() {
   const randomMap = n => repeat(() => repeat(randInteger, n), n);
 
   /**
-  * Count the number of "alive" neighbour cells.
-  * @param {Array<Array<Integer>>} [map] Map containing cells.
-  * @param {Integer} [x] x co-ordinate of the cell to check the neighbours of.
-  * @param {Integer} [y] y co-ordinate of the cell to check the neighbours of.
-  * @returns {Integer} Number of cells alive in the ring around the cell (x,y)
-  */
+   * Count the number of "alive" neighbour cells.
+   * @param {Array<Array<Integer>>} [map] Map containing cells.
+   * @param {Integer} [x] x co-ordinate of the cell to check the neighbours of.
+   * @param {Integer} [y] y co-ordinate of the cell to check the neighbours of.
+   * @returns {Integer} Number of cells alive in the ring around the cell (x,y)
+   */
   const countAliveNeighbours = (map, x, y) => {
     let count = 0;
 
@@ -48,10 +48,10 @@ const World = (function() {
   };
 
   /**
-  * Performs a single step of the Cellular Automata rules
-  * @param {Array<Array<Integer>>} [oldMap] The initial map to perform the iteration on.
-  * @returns {Array<Array<Integer>>} The map after a single simulation step
-  */
+   * Performs a single step of the Cellular Automata rules
+   * @param {Array<Array<Integer>>} [oldMap] The initial map to perform the iteration on.
+   * @returns {Array<Array<Integer>>} The map after a single simulation step
+   */
   const doSimulationStep = oldMap =>
     oldMap.map((row, x) =>
       row.map((elem, y) => {
@@ -59,8 +59,8 @@ const World = (function() {
 
         return int(
           elem
-            ? numAliveNeighbours >= DEATH_LIMIT
-            : numAliveNeighbours > BIRTH_LIMIT
+          ? numAliveNeighbours >= DEATH_LIMIT
+          : numAliveNeighbours > BIRTH_LIMIT
         );
       })
     );
@@ -79,23 +79,23 @@ const World = (function() {
   }
 
   /**
-  * World class containing the map and world game objects.
-  */
+   * World class containing the map and world game objects.
+   */
   class World {
     constructor() {
       this.grid = this.generateMap();
-			this.tiles = [
-				new Sprite(SPRITE_PIXEL_SIZE, SPRITE_PIXEL_SIZE, $images['earth'], -1, -1),     // Cave floor
-				new Sprite(SPRITE_PIXEL_SIZE, SPRITE_PIXEL_SIZE, $images['wall'], -1, -1),      // Wall
-				new Sprite(SPRITE_PIXEL_SIZE, SPRITE_PIXEL_SIZE, $images['treasure'], -1, -1),  // Treasure
-			];
+      this.tiles = [
+        new Sprite(SPRITE_PIXEL_SIZE, SPRITE_PIXEL_SIZE, $images['earth'], -1, -1),     // Cave floor
+        new Sprite(SPRITE_PIXEL_SIZE, SPRITE_PIXEL_SIZE, $images['wall'], -1, -1),      // Wall
+        new Sprite(SPRITE_PIXEL_SIZE, SPRITE_PIXEL_SIZE, $images['treasure'], -1, -1),  // Treasure
+      ];
     }
 
     /**
-    * Generates a cave tunnel system using the Cellular Automata ruleset.
-    * The map generated is GRID_SIZE width and height.
-    * @returns {Array<Array<Integer>>}
-    */
+     * Generates a cave tunnel system using the Cellular Automata ruleset.
+     * The map generated is GRID_SIZE width and height.
+     * @returns {Array<Array<Integer>>}
+     */
     generateMap() {
       let cellmap = randomMap(GRID_SIZE);
       for (let i = 0; i < NUM_SIMULATION_STEPS; ++i) {
