@@ -3,7 +3,7 @@
 (function() {
   let socket, //Socket.IO client
     canvas = document.getElementById('cvs'),
-    IMAGES = ['characters', 'grass', 'long_grass', 'earth'];
+    IMAGES = ['characters', 'earth', 'wall', 'treasure'];
 
   $context = canvas.getContext('2d');
   windowResize();
