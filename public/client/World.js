@@ -10,9 +10,9 @@ const World = (function() {
     NUM_SIMULATION_STEPS = 2,
     TREASURE_PLACEMENT_REQUIREMENT = 5, // number of wall cells must be around a treasure
     TILES = [
-      '#3355AA', // Cave floor
-      '#443333', // Wall
-      '#FFE000', // Treasure
+      new Sprite(SPRITE_PIXEL_SIZE, SPRITE_PIXEL_SIZE, $images['earth'], -1, -1), // Cave floor
+      new Sprite(SPRITE_PIXEL_SIZE, SPRITE_PIXEL_SIZE, $images['wall'], -1, -1), // Wall
+      new Sprite(SPRITE_PIXEL_SIZE, SPRITE_PIXEL_SIZE, $images['treasure'], -1, -1), // Treasure
     ];
 
   // Generate random map of size [N, N] filled with Integers
@@ -104,14 +104,14 @@ const World = (function() {
     }
 
     render() {
-      $context.save();
       for (let x = 0; x < GRID_SIZE; ++x) {
         for (let y = 0; y < GRID_SIZE; ++y) {
-          $context.fillStyle = TILES[this.grid[x][y]];
-          $context.fillRect(x * SQUARE_PIXEL_SIZE, y * SQUARE_PIXEL_SIZE, SQUARE_PIXEL_SIZE, SQUARE_PIXEL_SIZE);
+          let tile = TILES[this.grid[x][y]];
+          tile.x = x;
+          tile.y = y;
+          tile.render();
         }
       }
-      $context.restore();
     }
   }
 
