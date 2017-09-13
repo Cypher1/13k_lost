@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  <title>Lost</title>
+  <title>Lost 13K</title>
   <meta charset="UTF-8">
   <style>
     html,
@@ -26,24 +26,34 @@
       image-rendering: pixelated;                 /* Awesome future-browsers       */
       -ms-interpolation-mode: nearest-neighbor;   /* IE                            */
     }
+    div {
+      position: absolute;
+      background: rgba(0, 0, 0, 0.62);
+      padding: 9px;
+      top: 0;
+      right: 0;
+      color: white;
+      font-family: sans-serif;
+    }
   </style>
 </head>
 
 <body>
+  <div>
+    Chests opened: <span id="chests">0</span>
+  </div>
   <canvas id="cvs"></canvas>
 
-  <script src="/socket.io/socket.io.js"></script>
   <!-- DEV START -->
-  <script src="/shared.js"></script>
-  <script src="/client/globals.js"></script>
-  <script src="/client/Sprite.js"></script>
-  <script src="/client/AnimatedSprite.js"></script>
-  <script src="/client/Camera.js"></script>
-  <script src="/client/World.js"></script>
-  <script src="/client/Player.js"></script>
-  <script src="/client/Enemy.js"></script>
-  <script src="/client/client.js"></script>
-  <script src="/client/keyboardEvents.js"></script>
+  <script src="client/globals.js"></script>
+  <script src="client/Sprite.js"></script>
+  <script src="client/AnimatedSprite.js"></script>
+  <script src="client/Camera.js"></script>
+  <script src="client/World.js"></script>
+  <script src="client/Player.js"></script>
+  <script src="client/Enemy.js"></script>
+  <script src="client/client.js"></script>
+  <script src="client/keyboardEvents.js"></script>
   <!-- DEV END -->
 </body>
 

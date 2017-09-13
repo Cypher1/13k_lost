@@ -58,25 +58,25 @@ class Player extends AnimatedSprite {
     switch (this.direction) {
       case UP:
         this.y -= this._stepSize;
-        if ($world.grid[this.x][Math.floor(this.y).clamp(0, GRID_SIZE-1)] > 0) {
+        if ($world.grid[this.x][Math.floor(this.y).clamp(0, GRID_SIZE-1)] === 1) {
           this.y += this._stepSize;
         }
         break;
       case DOWN:
         this.y += this._stepSize;
-        if ($world.grid[this.x][Math.ceil(this.y).clamp(0, GRID_SIZE-1)] > 0) {
+        if ($world.grid[this.x][Math.ceil(this.y).clamp(0, GRID_SIZE-1)] === 1) {
           this.y -= this._stepSize;
         }
         break;
       case LEFT:
         this.x -= this._stepSize;
-        if ($world.grid[Math.floor(this.x).clamp(0, GRID_SIZE-1)][this.y] > 0) {
+        if ($world.grid[Math.floor(this.x).clamp(0, GRID_SIZE-1)][this.y] === 1) {
           this.x += this._stepSize;
         }
         break;
       case RIGHT:
         this.x += this._stepSize;
-        if ($world.grid[Math.ceil(this.x).clamp(0, GRID_SIZE-1)][this.y] > 0) {
+        if ($world.grid[Math.ceil(this.x).clamp(0, GRID_SIZE-1)][this.y] === 1) {
           this.x -= this._stepSize;
         }
         break;

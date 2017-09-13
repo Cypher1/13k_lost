@@ -49,6 +49,13 @@
 
   function update() {
     $player.update();
+
+    if ($world.grid[Math.round($player.x)][Math.round($player.y)] === GRID_TILES.TREASURE) {
+      $world.grid[Math.round($player.x)][Math.round($player.y)] = 0;
+      let elem = document.getElementById('chests');
+      elem.innerHTML = ++$game.chests;
+    }
+
     for (let enemy of $enemies) {
       enemy.update();
 
