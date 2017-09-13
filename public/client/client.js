@@ -3,7 +3,7 @@
 (function() {
   let socket, //Socket.IO client
     canvas = document.getElementById('cvs'),
-    IMAGES = ['player', 'grass', 'long_grass', 'earth'];
+    IMAGES = ['characters', 'grass', 'long_grass', 'earth'];
 
   $context = canvas.getContext('2d');
   windowResize();
@@ -37,7 +37,7 @@
 
   function frame() {
     now = Date.now();
-    if (now - last >= FRAME_TIME) {
+    if (now - last >= FRAME_TIME && !$game.ended) {
       update();
       last = now;
     }
@@ -46,7 +46,11 @@
   }
 
   function update() {
+    for (let enemy of $enemies) {
+      enemy.update();
+    }
     $player.update();
+
     $camera.update();
   }
 
@@ -58,13 +62,15 @@
     $world.render();
     // Draw player
     $player.render();
+    for (let enemy of $enemies) {
+      enemy.render();
+    }
   }
 
   function init(result) {
     $images = result;
     // socket = io({upgrade: false, transports: ['websocket']});
 
-    $player = new Player(0, SPRITE_PIXEL_SIZE, SPRITE_PIXEL_SIZE, $images['player'], 0, 0);
     /*    var grass = new AnimatedSprite(SPRITE_PIXEL_SIZE, SPRITE_PIXEL_SIZE, $images['grass'], 0, 0);
     var earth1 = new AnimatedSprite(SPRITE_PIXEL_SIZE, SPRITE_PIXEL_SIZE, $images['earth'], 0, 1);
     var earth2 = new AnimatedSprite(SPRITE_PIXEL_SIZE, SPRITE_PIXEL_SIZE, $images['earth'], 1, 1);
@@ -75,8 +81,10 @@
     $camera = new Camera();
 
     var pos = spawnRandomWhere(0, 0, $world.grid.length, $world.grid[0].length);
+    var pos2 = spawnRandomWhere(0, 0, $world.grid.length, $world.grid[0].length);
 
-    $player = new Player(0, SPRITE_PIXEL_SIZE, SPRITE_PIXEL_SIZE, $images['player'], pos.x, pos.y);
+    $player = new Player(0, SPRITE_PIXEL_SIZE, SPRITE_PIXEL_SIZE, $images['characters'], pos.x, pos.y);
+    $enemies.push(new Enemy(1, SPRITE_PIXEL_SIZE, SPRITE_PIXEL_SIZE, $images['characters'], pos2.x, pos2.y));
     requestAnimationFrame(frame);
   }
 
