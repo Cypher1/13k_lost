@@ -9,7 +9,7 @@ const World = (function() {
     DEATH_LIMIT = 3,
     NUM_SIMULATION_STEPS = 2,
     TREASURE_PLACEMENT_REQUIREMENT = 5; // number of wall cells must be around a treasure
-    
+
 
   // Generate random map of size [N, N] filled with Integers
   const repeat = (fn, n) => Array(n).fill().map(fn);
@@ -107,6 +107,12 @@ const World = (function() {
     render() {
       for (let x = 0; x < GRID_SIZE; ++x) {
         for (let y = 0; y < GRID_SIZE; ++y) {
+          if (this.grid[x][y] === GRID_TILES.TREASURE) {
+            let tile = this.tiles[GRID_TILES.EMPTY];
+            tile.x = x;
+            tile.y = y;
+            tile.render();
+          }
           let tile = this.tiles[this.grid[x][y]];
           tile.x = x;
           tile.y = y;

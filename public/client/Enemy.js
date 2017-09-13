@@ -2,6 +2,7 @@
 
 const Enemy = (function() {
   const VISION_DISTANCE = 6;
+  let enemyType = 0;  // used to change sprites for each enemy
 
   class Node {
     constructor(x, y, g, parent, goto, dir) {
@@ -39,10 +40,12 @@ const Enemy = (function() {
 
       this.path = [];
       this.target = $player;
-      this.walkAnimation = [6,7,8,7,6];
+      this.walkAnimation = [0,1,2,1,0].map(x => x + (enemyType*3));
       this._stepSize = 1 / this.walkAnimation.length;
 
       this.animate(this.walkAnimation, this.direction);
+
+      enemyType = (enemyType + 1) % 4;
     }
 
     reconstructPath(visited, curr) {
