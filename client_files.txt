@@ -1,4 +1,3 @@
-public/shared.js
 public/client/globals.js
 public/client/Sprite.js
 public/client/AnimatedSprite.js

@@ -67,7 +67,7 @@ const Enemy = (function() {
         visited.set(curr.id, curr);
 
 
-        if ((curr.g > VISION_DISTANCE+10) || (curr.x === coords.x && curr.y === coords.y)){
+        if ((curr.g > VISION_DISTANCE+4) || (curr.x === coords.x && curr.y === coords.y)){
           this.path = this.reconstructPath(visited, curr);
           return;
         }
