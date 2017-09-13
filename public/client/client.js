@@ -76,10 +76,7 @@
     // Draw player
     $player.render();
     for (let enemy of $enemies) {
-      if((enemy.x >= $camera.minX && enemy.x <= $camera.maxX)
-      && (enemy.y >= $camera.minY && enemy.y <= $camera.maxY)) {
-        enemy.render();
-      }
+      enemy.render();
     }
     $world.shadow();
   }
