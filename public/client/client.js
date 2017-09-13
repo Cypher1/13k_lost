@@ -65,6 +65,7 @@
     for (let enemy of $enemies) {
       enemy.render();
     }
+    $world.shadow();
   }
 
   function init(result) {

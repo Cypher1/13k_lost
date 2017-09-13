@@ -104,15 +104,23 @@ const World = (function() {
       return placeTreasure(cellmap);
     }
 
-    render() {
+    do(f) {
       for (let x = 0; x < GRID_SIZE; ++x) {
         for (let y = 0; y < GRID_SIZE; ++y) {
           let tile = this.tiles[this.grid[x][y]];
           tile.x = x;
           tile.y = y;
-          tile.render();
+          f(tile);
         }
       }
+    }
+
+    render() {
+      this.do(tile => tile.render());
+    }
+
+    shadow() {
+      this.do(tile => tile.shadow());
     }
   }
 
