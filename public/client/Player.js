@@ -29,7 +29,7 @@ class Player extends AnimatedSprite {
     this.y = this.y.clamp(0, GRID_SIZE-1);
   }
   
-    die() {
+  die() {
     this.animate([0], DEAD);
     $game.ended = true;
   }
