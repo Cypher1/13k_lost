@@ -1,7 +1,7 @@
 'use strict';
 
 const Enemy = (function() {
-  const VISION_DISTANCE = 6;
+  const MAX_PATH = 6;
   let enemyType = 0;  // used to change sprites for each enemy
 
   class Node {
@@ -67,8 +67,10 @@ const Enemy = (function() {
         visited.set(curr.id, curr);
 
 
-        if ((curr.g > VISION_DISTANCE+4) || (curr.x === coords.x && curr.y === coords.y)){
+        if (curr.g > MAX_PATH) break;
+        if (curr.x === coords.x && curr.y === coords.y){
           this.path = this.reconstructPath(visited, curr);
+          console.log('I CAN SEE THE PLAYER');
           return;
         }
 
@@ -97,15 +99,13 @@ const Enemy = (function() {
 
     // don't listen to keyboard events. work out where to go next
     stopped() {
-      if(this.path.length === 0 || this.path.length > 10) {
+      if(this.path.length === 0 || this.path.length > MAX_PATH) {
         // looking
         this.goTo($player.x, $player.y);
-        if (this.path.length > 10) {
+        if (this.path.length > MAX_PATH) {
           // we lost them
           this.getRandomMove();
           return this.state();
-        } else {
-          console.log('I CAN SEE THE PLAYER');
         }
       }
       // chase
