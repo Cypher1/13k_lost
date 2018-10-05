@@ -254,6 +254,8 @@
       sequence2.stop();
       sequence3.stop();
     }
+
+    $ac = ac;
   }
 
   function spawnRandomWhere(sx, sy, ex, ey, f) {
